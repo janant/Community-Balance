@@ -31,7 +31,7 @@ class WebsiteViewController: UIViewController, WKNavigationDelegate, PagesTableV
     }
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        UIApplication.shared().isNetworkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         UIView.transition(with: progressBar, duration: 0.2, options: .transitionCrossDissolve, animations: { () -> Void in
             self.progressBar.isHidden = false
             }, completion: nil)
@@ -39,17 +39,17 @@ class WebsiteViewController: UIViewController, WKNavigationDelegate, PagesTableV
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        UIApplication.shared().isNetworkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         
         progressBar.setProgress(1.0, animated: true)
         
-        perform("animateOutProgress", with: nil, afterDelay: 0.3)
+        perform(#selector(animateOutProgress), with: nil, afterDelay: 0.3)
         
         updateButtons()
     }
     
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
-        UIApplication.shared().isNetworkActivityIndicatorVisible = false
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         UIView.transition(with: progressBar, duration: 0.2, options: .transitionCrossDissolve, animations: { () -> Void in
             self.progressBar.isHidden = true
             }, completion: nil)
@@ -84,10 +84,10 @@ class WebsiteViewController: UIViewController, WKNavigationDelegate, PagesTableV
         website.load(URLRequest(url: URL(string: "https://dl.dropboxusercontent.com/u/55399127/communitybalance.net/Home.html")!))
         website.allowsBackForwardNavigationGestures = true
         website.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
-        website.backgroundColor = UIColor.white()
+        website.backgroundColor = UIColor.white
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: AnyObject?, change: [NSKeyValueChangeKey : AnyObject]?, context: UnsafeMutablePointer<Void>?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" {
             if let site = object as? WKWebView {
                 if site == website {
@@ -108,9 +108,9 @@ class WebsiteViewController: UIViewController, WKNavigationDelegate, PagesTableV
     }
     
 
-    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Pages" {
-            let pagesVC = (segue.destinationViewController as! UINavigationController).topViewController as! PagesTableViewController
+            let pagesVC = (segue.destination as! UINavigationController).topViewController as! PagesTableViewController
             pagesVC.delegate = self
         }
     }

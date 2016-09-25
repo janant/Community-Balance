@@ -50,7 +50,7 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
         
         episodeIsInFavorites = false
         
-        if let favorites = UserDefaults.standard().array(forKey: "Favorites") as? [[String: AnyObject]] {
+        if let favorites = UserDefaults.standard.array(forKey: "Favorites") as? [[String: AnyObject]] {
             self.favoritesData = favorites
             for favorite in favorites {
                 if favorite["Name"] as! String == info["Name"] as! String {
@@ -96,11 +96,11 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
             
             self.navigationItem.setRightBarButton(self.shareButton, animated: true)
             
-            UIApplication.shared().isNetworkActivityIndicatorVisible = true
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             
             let urlRequest = URLRequest(url: URL(string: episodeInfo!["Image"] as! String)!)
-            NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main()) { (response, data, error) -> Void in
-                UIApplication.shared().isNetworkActivityIndicatorVisible = false
+            NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main) { (response, data, error) -> Void in
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 
                 if error == nil {
                     self.episodeImage.image = UIImage(data: data!)
@@ -230,7 +230,7 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
         var isFavorite = false
         
         if favoritesData != nil {
-            for var favoriteIndex = 0; favoriteIndex < favoritesData?.count; favoriteIndex += 1 {
+            for favoriteIndex in 0..<favoritesData!.count {
                 if favoritesData?[favoriteIndex]["Name"] as! String == episodeInfo!["Name"] as! String {
                     isFavorite = true
                     favoritesData?.remove(at: favoriteIndex)
@@ -252,7 +252,7 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
         episodeIsInFavorites = !isFavorite
         self.episodesTable.reloadData()
         
-        UserDefaults.standard().set(favoritesData, forKey: "Favorites")
+        UserDefaults.standard.set(favoritesData, forKey: "Favorites")
         
         if delegate != nil {
             delegate?.updatedFavorites()
@@ -264,7 +264,7 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func updatedFavorites() {
-        if let favorites = UserDefaults.standard().array(forKey: "Favorites") as? [[String: AnyObject]] {
+        if let favorites = UserDefaults.standard.array(forKey: "Favorites") as? [[String: AnyObject]] {
             self.favoritesData = favorites
         }
         
@@ -275,7 +275,7 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
         var isFavorite = false
         
         if favoritesData != nil {
-            for var favoriteIndex = 0; favoriteIndex < favoritesData?.count; favoriteIndex += 1 {
+            for favoriteIndex in 0..<favoritesData!.count {
                 if favoritesData?[favoriteIndex]["Name"] as! String == episodeInfo!["Name"] as! String {
                     isFavorite = true
                     favoritesButton.setImage(UIImage(named: "Button Favorite.png"), for: UIControlState())
@@ -291,7 +291,7 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
         episodeIsInFavorites = isFavorite
         self.episodesTable.reloadData()
         
-        UserDefaults.standard().set(favoritesData, forKey: "Favorites")
+        UserDefaults.standard.set(favoritesData, forKey: "Favorites")
     }
     
     func reloadedData() {
@@ -317,7 +317,7 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func updatedFavoritesList() {
-        if let favorites = UserDefaults.standard().array(forKey: "Favorites") as? [[String: AnyObject]] {
+        if let favorites = UserDefaults.standard.array(forKey: "Favorites") as? [[String: AnyObject]] {
             self.favoritesData = favorites
         }
         if favoritesData == nil {
@@ -327,7 +327,7 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
         var isFavorite = false
         
         if favoritesData != nil && episodeInfo != nil {
-            for var favoriteIndex = 0; favoriteIndex < favoritesData?.count; favoriteIndex += 1 {
+            for favoriteIndex in 0..<favoritesData!.count {
                 if favoritesData?[favoriteIndex]["Name"] as! String == episodeInfo!["Name"] as! String {
                     isFavorite = true
                     break
@@ -350,15 +350,15 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Episode" {
-            let videoVC = (segue.destinationViewController as! UINavigationController).topViewController as! VideoViewController
+            let videoVC = (segue.destination as! UINavigationController).topViewController as! VideoViewController
             videoVC.videoHTMLString = YouTubeViewer.HTMLStringWithVideoURLString((episodeInfo!["Links"] as! [String])[((sender as! IndexPath) as NSIndexPath).row])
             videoVC.navigationTitle = self.tableView(self.episodesTable, cellForRowAt: sender as! IndexPath).textLabel?.text
             videoVC.delegate = self
         }
         else if segue.identifier == "Organization Website" {
-            let organizationWebsiteVC = (segue.destinationViewController as! UINavigationController).topViewController as! OrganizationWebsiteViewController
+            let organizationWebsiteVC = (segue.destination as! UINavigationController).topViewController as! OrganizationWebsiteViewController
             organizationWebsiteVC.websiteURLRequest = URLRequest(url: URL(string: episodeInfo!["Site"] as! String)!)
             organizationWebsiteVC.delegate = self
         }

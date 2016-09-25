@@ -41,7 +41,7 @@ class OrganizationWebsiteViewController: UIViewController, WKNavigationDelegate 
     }
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        UIApplication.shared().isNetworkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         UIView.transition(with: progressBar, duration: 0.2, options: .transitionCrossDissolve, animations: { () -> Void in
             self.progressBar.isHidden = false
             }, completion: nil)
@@ -49,17 +49,17 @@ class OrganizationWebsiteViewController: UIViewController, WKNavigationDelegate 
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        UIApplication.shared().isNetworkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         
         progressBar.setProgress(1.0, animated: true)
         
-        perform("animateOutProgress", with: nil, afterDelay: 0.3)
+        perform(#selector(animateOutProgress), with: nil, afterDelay: 0.3)
         
         updateButtons()
     }
     
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
-        UIApplication.shared().isNetworkActivityIndicatorVisible = false
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         UIView.transition(with: progressBar, duration: 0.2, options: .transitionCrossDissolve, animations: { () -> Void in
             self.progressBar.isHidden = true
             }, completion: nil)
@@ -92,10 +92,10 @@ class OrganizationWebsiteViewController: UIViewController, WKNavigationDelegate 
         self.view.addConstraints([leading, trailing, top])
         
         website.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
-        website.backgroundColor = UIColor.white()
+        website.backgroundColor = UIColor.white
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: AnyObject?, change: [NSKeyValueChangeKey : AnyObject]?, context: UnsafeMutablePointer<Void>?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" {
             if let site = object as? WKWebView {
                 if site == website {
@@ -127,7 +127,7 @@ class OrganizationWebsiteViewController: UIViewController, WKNavigationDelegate 
 
     @IBAction func closeWebsite(_ sender: AnyObject) {
         website.removeObserver(self, forKeyPath: "estimatedProgress")
-        UIApplication.shared().isNetworkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         dismiss(animated: true, completion: { () -> Void in
             if self.delegate != nil {
                 self.delegate?.dismissedWebsite()

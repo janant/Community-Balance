@@ -38,12 +38,12 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
             loadFailedView.alpha = 0.0
             loadFailedView.isHidden = true
             
-            UIApplication.shared().isNetworkActivityIndicatorVisible = true
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             
             let urlRequest = URLRequest(url: URL(string: "http://dl.dropboxusercontent.com/u/55399127/communitybalance.net/App_Property_List_files/Episodes.plist")!)
             
-            NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main(), completionHandler: { (response, data, error) -> Void in
-                UIApplication.shared().isNetworkActivityIndicatorVisible = false
+            NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { (response, data, error) -> Void in
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.loadingIndicator.stopAnimating()
                 
                 if error == nil {
@@ -82,7 +82,7 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
             })
         }
         
-        if let favorites = UserDefaults.standard().array(forKey: "Favorites") as? [[String: AnyObject]] {
+        if let favorites = UserDefaults.standard.array(forKey: "Favorites") as? [[String: AnyObject]] {
             self.favoritesData = favorites
         }
         
@@ -103,7 +103,7 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        refreshControl.addTarget(self, action: Selector("refreshData"), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(refreshData), for: UIControlEvents.valueChanged)
         self.episodesTable.addSubview(refreshControl)
         
 //        let detailNavVC = self.splitViewController?.viewControllers[1] as! UINavigationController
@@ -145,10 +145,10 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
         var isFavorite = false
         
         if favoritesData != nil {
-            for var favoriteIndex = 0; favoriteIndex < favoritesData?.count; favoriteIndex += 1 {
+            for favoriteIndex in 0..<favoritesData!.count {
                 let favorite = favoritesData![favoriteIndex]
                 let episode = episodesData![(indexPath as NSIndexPath).row]
-
+                
                 if favorite["Name"] as! String == episode["Name"] as! String {
                     isFavorite = true
                     break
@@ -169,7 +169,7 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
         let index = (self.episodesTable.indexPath(for: (sender.superview?.superview as! UITableViewCell))! as NSIndexPath).row
         
         if favoritesData != nil {
-            for var favoriteIndex = 0; favoriteIndex < favoritesData?.count; favoriteIndex += 1 {
+            for favoriteIndex in 0..<favoritesData!.count {
                 if favoritesData?[favoriteIndex]["Name"] as! String == episodesData?[index]["Name"] as! String {
                     isFavorite = true
                     favoritesData?.remove(at: favoriteIndex)
@@ -188,7 +188,7 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
                 }, completion: nil)
         }
         
-        UserDefaults.standard().set(favoritesData, forKey: "Favorites")
+        UserDefaults.standard.set(favoritesData, forKey: "Favorites")
         
         if delegate != nil {
             self.delegate?.updatedFavorites()
@@ -199,9 +199,9 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let urlRequest = URLRequest(url: URL(string: "http://dl.dropboxusercontent.com/u/55399127/communitybalance.net/App_Property_List_files/Episodes.plist")!)
         
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main()) { (response, data, error) -> Void in
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main) { (response, data, error) -> Void in
             if error == nil {
-                UIApplication.shared().isNetworkActivityIndicatorVisible = false
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 
                 do {
                     self.episodesData = try PropertyListSerialization.propertyList(from: data!, options: PropertyListSerialization.MutabilityOptions(), format: nil) as? [[String: AnyObject]]
@@ -217,7 +217,7 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
                 }
             }
             else {
-                UIApplication.shared().isNetworkActivityIndicatorVisible = false
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.refreshControl.endRefreshing()
                 
                 let refreshFailedAlert = UIAlertController(title: "Failed to Load Episodes", message: "Check your network connection.", preferredStyle: .alert)
@@ -228,9 +228,9 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Episode Detail" {
-            let watchDetailVC = (segue.destinationViewController as! UINavigationController).topViewController as! WatchDetailViewController
+            let watchDetailVC = (segue.destination as! UINavigationController).topViewController as! WatchDetailViewController
             
             if let cell = sender as? UITableViewCell {
                 if let cellIndexRow = (episodesTable.indexPath(for: cell) as NSIndexPath?)?.row {
@@ -241,13 +241,13 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
             watchDetailVC.delegate = self
             self.delegate = watchDetailVC
             
-            watchDetailVC.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+            watchDetailVC.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
             watchDetailVC.navigationItem.leftItemsSupplementBackButton = true
         }
     }
     
     func updatedFavorites() {
-        if let favorites = UserDefaults.standard().array(forKey: "Favorites") as? [[String: AnyObject]] {
+        if let favorites = UserDefaults.standard.array(forKey: "Favorites") as? [[String: AnyObject]] {
             self.favoritesData = favorites
         }
         

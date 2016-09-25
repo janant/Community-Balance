@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     var favoritesSplitView: UISplitViewController?
     var moreSplitView: UISplitViewController?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let tabBarController = window!.rootViewController as! UITabBarController
         
@@ -41,12 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     
     @available(iOS 9.0, *)
-    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         guard let tabBarController = self.window?.rootViewController as? UITabBarController else {
             completionHandler(false)
             return
         }
-        
         if shortcutItem.type == "edu.self.Community-Balance.watch-episodes" {
             tabBarController.selectedIndex = 1
             completionHandler(true)
@@ -58,8 +57,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         else {
             completionHandler(false)
         }
-        
     }
+//    
+//    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
+//        
+//    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

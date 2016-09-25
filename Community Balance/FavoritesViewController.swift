@@ -28,7 +28,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        favoritesData = UserDefaults.standard().array(forKey: "Favorites") as? [[String: AnyObject]]
+        favoritesData = UserDefaults.standard.array(forKey: "Favorites") as? [[String: AnyObject]]
         if favoritesData != nil && favoritesData?.count != 0 {
             self.favoritesTable.reloadData()
             
@@ -93,7 +93,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         if editingStyle == UITableViewCellEditingStyle.delete {
             self.favoritesData?.remove(at: (indexPath as NSIndexPath).row)
             self.favoritesTable.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-            UserDefaults.standard().set(self.favoritesData, forKey: "Favorites")
+            UserDefaults.standard.set(self.favoritesData, forKey: "Favorites")
             
             if self.delegate != nil {
                 self.delegate?.updatedFavoritesList()
@@ -118,14 +118,14 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         let dataToMove = favoritesData![(sourceIndexPath as NSIndexPath).row]
         self.favoritesData?.remove(at: (sourceIndexPath as NSIndexPath).row)
         self.favoritesData?.insert(dataToMove, at: (destinationIndexPath as NSIndexPath).row)
-        UserDefaults.standard().set(self.favoritesData, forKey: "Favorites")
+        UserDefaults.standard.set(self.favoritesData, forKey: "Favorites")
     }
     
     func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
         self.navigationItem.setLeftBarButton(self.doneButton, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         if favoritesData?.count != 0 {
             self.navigationItem.setLeftBarButton(self.editButton, animated: true)
         }
@@ -146,9 +146,9 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Episode Detail" {
-            let watchDetailVC = (segue.destinationViewController as! UINavigationController).topViewController as! WatchDetailViewController
+            let watchDetailVC = (segue.destination as! UINavigationController).topViewController as! WatchDetailViewController
             if let cell = sender as? UITableViewCell {
                 if let cellIndexRow = (favoritesTable.indexPath(for: cell) as NSIndexPath?)?.row {
                     watchDetailVC.episodeInfo = favoritesData![cellIndexRow]
@@ -158,7 +158,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             watchDetailVC.delegate = self
             self.delegate = watchDetailVC
             
-            watchDetailVC.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+            watchDetailVC.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
             watchDetailVC.navigationItem.leftItemsSupplementBackButton = true
         }
     }
@@ -172,7 +172,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func updatedFavorites() {
-        if let favorites = UserDefaults.standard().array(forKey: "Favorites") as? [[String: AnyObject]] {
+        if let favorites = UserDefaults.standard.array(forKey: "Favorites") as? [[String: AnyObject]] {
             self.favoritesData = favorites
         }
         self.favoritesTable.deleteRows(at: [currentlySelected!], with: UITableViewRowAnimation.automatic)

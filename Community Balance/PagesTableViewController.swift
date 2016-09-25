@@ -46,9 +46,9 @@ class PagesTableViewController: UITableViewController {
         case 2:
             switch (indexPath as NSIndexPath).row {
             case 0:
-                UIApplication.shared().openURL(URL(string: "https://dl.dropboxusercontent.com/u/55399127/communitybalance.net/Home.html")!)
+                UIApplication.shared.openURL(URL(string: "https://dl.dropboxusercontent.com/u/55399127/communitybalance.net/Home.html")!)
             case 1:
-                UIApplication.shared().openURL(URL(string: "http://www.youtube.com/user/CommBAL/")!)
+                UIApplication.shared.openURL(URL(string: "http://www.youtube.com/user/CommBAL/")!)
             default:
                 return
             }

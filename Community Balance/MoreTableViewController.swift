@@ -37,9 +37,9 @@ class MoreTableViewController: UITableViewController {
         case 1:
             switch (indexPath as NSIndexPath).row {
             case 0:
-                UIApplication.shared().openURL(URL(string: "http://www.communitybalance.net/")!)
+                UIApplication.shared.openURL(URL(string: "http://www.communitybalance.net/")!)
             case 1:
-                UIApplication.shared().openURL(URL(string: "http://www.youtube.com/user/CommBAL/")!)
+                UIApplication.shared.openURL(URL(string: "http://www.youtube.com/user/CommBAL/")!)
             default:
                 break
             }
@@ -49,9 +49,9 @@ class MoreTableViewController: UITableViewController {
         }
     }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Detail" {
-            let moreDetailVC = (segue.destinationViewController as! UINavigationController).topViewController as! MoreDetailViewController
+            let moreDetailVC = (segue.destination as! UINavigationController).topViewController as! MoreDetailViewController
             
             switch ((sender as! IndexPath) as NSIndexPath).row {
             case 0:
@@ -62,7 +62,7 @@ class MoreTableViewController: UITableViewController {
                 break
             }
             
-            moreDetailVC.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+            moreDetailVC.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
             moreDetailVC.navigationItem.leftItemsSupplementBackButton = true
         }
     }

@@ -163,7 +163,7 @@ class MoreDetailViewController: UIViewController, UITableViewDataSource {
                 switch (indexPath as NSIndexPath).row {
                 case 0:
                     cell.textLabel!.text = "App Version"
-                    cell.detailTextLabel!.text = Bundle.main().infoDictionary!["CFBundleShortVersionString"] as? String
+                    cell.detailTextLabel!.text = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String
                 default:
                     break
                 }
