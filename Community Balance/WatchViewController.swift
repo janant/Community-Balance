@@ -40,7 +40,7 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
             
-            let urlRequest = URLRequest(url: URL(string: "http://dl.dropboxusercontent.com/u/55399127/communitybalance.net/App_Property_List_files/Episodes.plist")!)
+            let urlRequest = URLRequest(url: URL(string: "https://dl.dropboxusercontent.com/s/2zm64y7gbgrvjfa/Episodes.plist?dl=0")!)
             
             NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { (response, data, error) -> Void in
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -197,7 +197,7 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func refreshData() {
         
-        let urlRequest = URLRequest(url: URL(string: "http://dl.dropboxusercontent.com/u/55399127/communitybalance.net/App_Property_List_files/Episodes.plist")!)
+        let urlRequest = URLRequest(url: URL(string: "https://dl.dropboxusercontent.com/s/2zm64y7gbgrvjfa/Episodes.plist?dl=0")!)
         
         NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main) { (response, data, error) -> Void in
             if error == nil {

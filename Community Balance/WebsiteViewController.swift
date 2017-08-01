@@ -81,7 +81,7 @@ class WebsiteViewController: UIViewController, WKNavigationDelegate, PagesTableV
         
         self.view.addConstraints([leading, trailing, top])
         
-        website.load(URLRequest(url: URL(string: "https://dl.dropboxusercontent.com/u/55399127/communitybalance.net/Home.html")!))
+        website.load(URLRequest(url: URL(string: "http://www.youtube.com/user/CommBAL/")!))
         website.allowsBackForwardNavigationGestures = true
         website.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
         website.backgroundColor = UIColor.white
