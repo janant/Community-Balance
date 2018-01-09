@@ -15,7 +15,7 @@ protocol WatchDetailViewControllerDelegate {
     func shouldClearIfRemoved() -> Bool
 }
 
-class WatchDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, WatchViewControllerDelegate, OrganizationWebsiteViewControllerDelegate, VideoViewControllerDelegate, FavoritesViewControllerDelegate, SFSafariViewControllerDelegate, UIPopoverPresentationControllerDelegate {
+class WatchDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, WatchViewControllerDelegate, VideoViewControllerDelegate, FavoritesViewControllerDelegate, SFSafariViewControllerDelegate, UIPopoverPresentationControllerDelegate {
     
     @IBOutlet weak var episodeBannerView: UIView!
     @IBOutlet weak var selectEpisodeLabel: UILabel!
@@ -99,17 +99,21 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
             
             let urlRequest = URLRequest(url: URL(string: episodeInfo!["Image"] as! String)!)
-            NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main) { (response, data, error) -> Void in
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                
-                if error == nil {
-                    self.episodeImage.image = UIImage(data: data!)
+            let session = URLSession(configuration: .default)
+            let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
+                DispatchQueue.main.async {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    
+                    if error == nil {
+                        self.episodeImage.image = UIImage(data: data!)
+                    }
+                    
+                    UIView.animate(withDuration: 0.3, animations: { () -> Void in
+                        self.episodeImage.alpha = 1.0
+                    })
                 }
-                
-                UIView.animate(withDuration: 0.3, animations: { () -> Void in
-                    self.episodeImage.alpha = 1.0
-                })
             }
+            dataTask.resume()
         }
         else {
             self.episodeBannerView.isHidden = true
@@ -180,16 +184,10 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
         case 1:
             toggleFavorite(favoritesButton)
         case 2:
-            if #available(iOS 9.0, *) {
-                let safariVC = SFSafariViewController(url: URL(string: episodeInfo!["Site"] as! String)!)
-                safariVC.modalPresentationStyle = .pageSheet
-                safariVC.delegate = self
-                
-                present(safariVC, animated: true, completion: nil)
-            }
-            else {
-                performSegue(withIdentifier: "Organization Website", sender: nil)
-            }
+            let safariVC = SFSafariViewController(url: URL(string: episodeInfo!["Site"] as! String)!)
+            safariVC.modalPresentationStyle = .pageSheet
+            safariVC.delegate = self
+            present(safariVC, animated: true, completion: nil)
         default:
             break
         }
@@ -304,12 +302,6 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
         self.episodeInfo = nil
     }
     
-    func dismissedWebsite() {
-        if let index = self.episodesTable.indexPathForSelectedRow {
-            self.episodesTable.deselectRow(at: index, animated: true)
-        }
-    }
-    
     func closedVideo() {
         if let index = self.episodesTable.indexPathForSelectedRow {
             self.episodesTable.deselectRow(at: index, animated: true)
@@ -357,14 +349,8 @@ class WatchDetailViewController: UIViewController, UITableViewDataSource, UITabl
             videoVC.navigationTitle = self.tableView(self.episodesTable, cellForRowAt: sender as! IndexPath).textLabel?.text
             videoVC.delegate = self
         }
-        else if segue.identifier == "Organization Website" {
-            let organizationWebsiteVC = (segue.destination as! UINavigationController).topViewController as! OrganizationWebsiteViewController
-            organizationWebsiteVC.websiteURLRequest = URLRequest(url: URL(string: episodeInfo!["Site"] as! String)!)
-            organizationWebsiteVC.delegate = self
-        }
     }
     
-    @available(iOS 9.0, *)
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         if let index = self.episodesTable.indexPathForSelectedRow {
             self.episodesTable.deselectRow(at: index, animated: true)

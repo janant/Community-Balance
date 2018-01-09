@@ -17,7 +17,6 @@
 		166DF2801A512AAD003C98FC /* Failed to Load Episode Image Substitute.png in Resources */ = {isa = PBXBuildFile; fileRef = 166DF27E1A512AAD003C98FC /* Failed to Load Episode Image Substitute.png */; };
 		16D171DD1A5237B40025BEEA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16D171DC1A5237B40025BEEA /* LaunchScreen.storyboard */; };
 		16D171DF1A5238FD0025BEEA /* Button Down.png in Resources */ = {isa = PBXBuildFile; fileRef = 16D171DE1A5238FD0025BEEA /* Button Down.png */; };
-		16D1720D1A5272BD0025BEEA /* OrganizationWebsiteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D1720C1A5272BD0025BEEA /* OrganizationWebsiteViewController.swift */; };
 		16D1720F1A5272C50025BEEA /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D1720E1A5272C50025BEEA /* VideoViewController.swift */; };
 		16D172141A527AEB0025BEEA /* YouTubeViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D172131A527AEB0025BEEA /* YouTubeViewer.swift */; };
 		16D172161A5280700025BEEA /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D172151A5280700025BEEA /* FavoritesViewController.swift */; };
@@ -44,7 +43,6 @@
 		166DF27E1A512AAD003C98FC /* Failed to Load Episode Image Substitute.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Failed to Load Episode Image Substitute.png"; sourceTree = "<group>"; };
 		16D171DC1A5237B40025BEEA /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		16D171DE1A5238FD0025BEEA /* Button Down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button Down.png"; sourceTree = "<group>"; };
-		16D1720C1A5272BD0025BEEA /* OrganizationWebsiteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrganizationWebsiteViewController.swift; sourceTree = "<group>"; };
 		16D1720E1A5272C50025BEEA /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		16D172131A527AEB0025BEEA /* YouTubeViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubeViewer.swift; sourceTree = "<group>"; };
 		16D172151A5280700025BEEA /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
@@ -136,7 +134,6 @@
 				16F16F5E1A51164400CC9B73 /* WatchDetailViewController.swift */,
 				166531211C07A9A9008EC3EA /* WatchDetailNavigationController.swift */,
 				16D1720E1A5272C50025BEEA /* VideoViewController.swift */,
-				16D1720C1A5272BD0025BEEA /* OrganizationWebsiteViewController.swift */,
 				16D172131A527AEB0025BEEA /* YouTubeViewer.swift */,
 				16F16F021A50B49D00CC9B73 /* Images.xcassets */,
 				16D171DC1A5237B40025BEEA /* LaunchScreen.storyboard */,
@@ -206,13 +203,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Anant Jain";
 				TargetAttributes = {
 					16F16EF51A50B49D00CC9B73 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = RENT9T8393;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0920;
 					};
 				};
 			};
@@ -260,7 +257,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				16F16F201A50BFAE00CC9B73 /* PagesTableViewController.swift in Sources */,
-				16D1720D1A5272BD0025BEEA /* OrganizationWebsiteViewController.swift in Sources */,
 				16D1720F1A5272C50025BEEA /* VideoViewController.swift in Sources */,
 				16F16F1C1A50B81300CC9B73 /* WebsiteViewController.swift in Sources */,
 				16F16F281A50CEC900CC9B73 /* MoreDetailViewController.swift in Sources */,
@@ -296,14 +292,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -326,7 +328,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -343,14 +345,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -366,7 +374,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -382,11 +390,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "Community Balance/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.self.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -397,11 +406,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "Community Balance/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.self.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

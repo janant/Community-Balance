@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WebKit
 
 protocol VideoViewControllerDelegate {
     func closedVideo()
@@ -14,7 +15,7 @@ protocol VideoViewControllerDelegate {
 
 class VideoViewController: UIViewController {
     
-    @IBOutlet weak var video: UIWebView!
+    @IBOutlet weak var video: WKWebView!
     
     var videoHTMLString: String?
     var navigationTitle: String?
@@ -39,21 +40,8 @@ class VideoViewController: UIViewController {
     }
 
     @IBAction func closeVideo(_ sender: AnyObject) {
-        dismiss(animated: true, completion: { () -> Void in
-            if self.delegate != nil {
-                self.delegate?.closedVideo()
-            }
-        })
+        dismiss(animated: true) {
+            self.delegate?.closedVideo()
+        }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

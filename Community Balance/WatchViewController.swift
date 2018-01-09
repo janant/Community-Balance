@@ -41,45 +41,48 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
             
             let urlRequest = URLRequest(url: URL(string: "https://dl.dropboxusercontent.com/s/2zm64y7gbgrvjfa/Episodes.plist?dl=0")!)
-            
-            NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { (response, data, error) -> Void in
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.loadingIndicator.stopAnimating()
-                
-                if error == nil {
+            let session = URLSession(configuration: .default)
+            let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
+                DispatchQueue.main.async {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    self.loadingIndicator.stopAnimating()
                     
-                    do {
-                        self.episodesData = try PropertyListSerialization.propertyList(from: data!, options: PropertyListSerialization.MutabilityOptions(), format: nil) as? [[String: AnyObject]]
-                    } catch {
+                    if error == nil {
                         
-                    }
-                    
-                    self.episodesTable.reloadData()
-                    
-                    self.episodesTable.isHidden = false
-                    UIView.animate(withDuration: 0.25, animations: { () -> Void in
-                        self.episodesTable.alpha = 1.0
-                        self.loadFailedView.alpha = 0.0
-                        self.loadingIndicator.alpha = 0.0
+                        do {
+                            self.episodesData = try PropertyListSerialization.propertyList(from: data!, options: PropertyListSerialization.MutabilityOptions(), format: nil) as? [[String: AnyObject]]
+                        } catch {
+                            // Do nothing
+                        }
+                        
+                        self.episodesTable.reloadData()
+                        
+                        self.episodesTable.isHidden = false
+                        UIView.animate(withDuration: 0.25, animations: { () -> Void in
+                            self.episodesTable.alpha = 1.0
+                            self.loadFailedView.alpha = 0.0
+                            self.loadingIndicator.alpha = 0.0
                         }, completion: { (completed: Bool) -> Void in
                             self.loadFailedView.isHidden = true
                             self.loadingIndicator.isHidden = true
-                    })
-                }
-                else {
-                    self.initialLoadSucceeded = false
-                    
-                    self.loadFailedView.isHidden = false
-                    UIView.animate(withDuration: 0.25, animations: { () -> Void in
-                        self.episodesTable.alpha = 0.0
-                        self.loadFailedView.alpha = 1.0
-                        self.loadingIndicator.alpha = 0.0
+                        })
+                    }
+                    else {
+                        self.initialLoadSucceeded = false
+                        
+                        self.loadFailedView.isHidden = false
+                        UIView.animate(withDuration: 0.25, animations: { () -> Void in
+                            self.episodesTable.alpha = 0.0
+                            self.loadFailedView.alpha = 1.0
+                            self.loadingIndicator.alpha = 0.0
                         }, completion: { (completed: Bool) -> Void in
                             self.episodesTable.isHidden = true
                             self.loadingIndicator.isHidden = true
-                    })
+                        })
+                    }
                 }
-            })
+            }
+            dataTask.resume()
         }
         
         if let favorites = UserDefaults.standard.array(forKey: "Favorites") as? [[String: AnyObject]] {
@@ -104,10 +107,7 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         // Do any additional setup after loading the view.
         refreshControl.addTarget(self, action: #selector(refreshData), for: UIControlEvents.valueChanged)
-        self.episodesTable.addSubview(refreshControl)
-        
-//        let detailNavVC = self.splitViewController?.viewControllers[1] as! UINavigationController
-//        detailNavVC.topViewController!.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+        self.episodesTable.refreshControl = refreshControl
         
         self.splitViewController?.preferredDisplayMode = .allVisible
         self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.5
@@ -195,36 +195,38 @@ class WatchViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func refreshData() {
-        
+    @objc func refreshData() {
         let urlRequest = URLRequest(url: URL(string: "https://dl.dropboxusercontent.com/s/2zm64y7gbgrvjfa/Episodes.plist?dl=0")!)
-        
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main) { (response, data, error) -> Void in
-            if error == nil {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                
-                do {
-                    self.episodesData = try PropertyListSerialization.propertyList(from: data!, options: PropertyListSerialization.MutabilityOptions(), format: nil) as? [[String: AnyObject]]
-                } catch {
+        let session = URLSession(configuration: .default)
+        let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
+            DispatchQueue.main.async {
+                if error == nil {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     
+                    do {
+                        self.episodesData = try PropertyListSerialization.propertyList(from: data!, options: PropertyListSerialization.MutabilityOptions(), format: nil) as? [[String: AnyObject]]
+                    } catch {
+                        // Do nothing
+                    }
+                    
+                    self.episodesTable.reloadData()
+                    self.refreshControl.endRefreshing()
+                    
+                    if self.delegate != nil {
+                        self.delegate?.reloadedData()
+                    }
                 }
-                
-                self.episodesTable.reloadData()
-                self.refreshControl.endRefreshing()
-                
-                if self.delegate != nil {
-                    self.delegate?.reloadedData()
+                else {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    self.refreshControl.endRefreshing()
+                    
+                    let refreshFailedAlert = UIAlertController(title: "Failed to Load Episodes", message: "Check your network connection.", preferredStyle: .alert)
+                    refreshFailedAlert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
+                    self.present(refreshFailedAlert, animated: true, completion: nil)
                 }
-            }
-            else {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.refreshControl.endRefreshing()
-                
-                let refreshFailedAlert = UIAlertController(title: "Failed to Load Episodes", message: "Check your network connection.", preferredStyle: .alert)
-                refreshFailedAlert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
-                self.present(refreshFailedAlert, animated: true, completion: nil)
             }
         }
+        dataTask.resume()
     }
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

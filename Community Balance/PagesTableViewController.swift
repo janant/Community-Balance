@@ -40,15 +40,15 @@ class PagesTableViewController: UITableViewController {
         
         switch (indexPath as NSIndexPath).section {
         case 0:
-            websiteURL = "https://dl.dropboxusercontent.com/u/55399127/communitybalance.net/Home.html"
+            websiteURL = "http://www.communitybalance.net/"
         case 1:
             websiteURL = "http://www.youtube.com/user/CommBAL/"
         case 2:
             switch (indexPath as NSIndexPath).row {
             case 0:
-                UIApplication.shared.openURL(URL(string: "https://dl.dropboxusercontent.com/u/55399127/communitybalance.net/Home.html")!)
+                UIApplication.shared.open(URL(string: "http://www.communitybalance.net/")!, options: [String : Any](), completionHandler: nil)
             case 1:
-                UIApplication.shared.openURL(URL(string: "http://www.youtube.com/user/CommBAL/")!)
+                UIApplication.shared.open(URL(string: "http://www.youtube.com/user/CommBAL/")!, options: [String : Any](), completionHandler: nil)
             default:
                 return
             }

@@ -10,6 +10,17 @@ import UIKit
 
 class MoreTableViewController: UITableViewController {
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Deselects table row if necessary
+        if splitViewController?.traitCollection.horizontalSizeClass == .compact {
+            if let selectedIndex = tableView.indexPathForSelectedRow {
+                tableView.deselectRow(at: selectedIndex, animated: true)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -18,9 +29,6 @@ class MoreTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
-//        let detailNavVC = self.splitViewController?.viewControllers[1] as! UINavigationController
-//        detailNavVC.topViewController!.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
         
         self.splitViewController?.preferredDisplayMode = .allVisible
     }
@@ -37,9 +45,9 @@ class MoreTableViewController: UITableViewController {
         case 1:
             switch (indexPath as NSIndexPath).row {
             case 0:
-                UIApplication.shared.openURL(URL(string: "http://www.communitybalance.net/")!)
+                UIApplication.shared.open(URL(string: "http://www.communitybalance.net/")!, options: [String : Any](), completionHandler: nil)
             case 1:
-                UIApplication.shared.openURL(URL(string: "http://www.youtube.com/user/CommBAL/")!)
+                UIApplication.shared.open(URL(string: "http://www.youtube.com/user/CommBAL/")!, options: [String : Any](), completionHandler: nil)
             default:
                 break
             }

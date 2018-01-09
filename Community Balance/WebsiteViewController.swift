@@ -11,10 +11,10 @@ import WebKit
 
 class WebsiteViewController: UIViewController, WKNavigationDelegate, PagesTableViewControllerDelegate {
     
-    var website: WKWebView!
+    @IBOutlet weak var website: WKWebView!
     @IBOutlet weak var forwardButton: UIBarButtonItem!
     @IBOutlet weak var backButton: UIBarButtonItem!
-    var progressBar = UIProgressView(progressViewStyle: UIProgressViewStyle.bar)
+    @IBOutlet weak var progressBar: UIProgressView!
     
     @IBAction func goBack(_ sender: UIBarButtonItem) {
         if website.canGoBack {
@@ -56,7 +56,7 @@ class WebsiteViewController: UIViewController, WKNavigationDelegate, PagesTableV
         updateButtons()
     }
     
-    func animateOutProgress() {
+    @objc func animateOutProgress() {
         UIView.transition(with: progressBar, duration: 0.2, options: .transitionCrossDissolve, animations: { () -> Void in
             self.progressBar.isHidden = true
             }, completion: { (completed) -> Void in
@@ -68,23 +68,11 @@ class WebsiteViewController: UIViewController, WKNavigationDelegate, PagesTableV
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        website = WKWebView()
+        
+        // Configurs website
         website.navigationDelegate = self
-        view = website
-        
-        let leading = NSLayoutConstraint(item: progressBar, attribute: .leading, relatedBy: .equal, toItem: website, attribute: .leading, multiplier: 1.0, constant: 0)
-        let trailing = NSLayoutConstraint(item: progressBar, attribute: .trailing, relatedBy: .equal, toItem: website, attribute: .trailing, multiplier: 1.0, constant: 0)
-        let top = NSLayoutConstraint(item: progressBar, attribute: .top, relatedBy: .equal, toItem: self.topLayoutGuide, attribute: .bottom, multiplier: 1.0, constant: 0)
-        progressBar.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.view.addSubview(progressBar)
-        
-        self.view.addConstraints([leading, trailing, top])
-        
         website.load(URLRequest(url: URL(string: "http://www.youtube.com/user/CommBAL/")!))
-        website.allowsBackForwardNavigationGestures = true
         website.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
-        website.backgroundColor = UIColor.white
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
